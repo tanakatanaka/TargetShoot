@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{8E39A40E-4E08-0F3C-E6C5-92AAA6152F90}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "hitTarget",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
