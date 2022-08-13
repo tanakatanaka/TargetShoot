@@ -54,9 +54,12 @@ class AhitTargetCharacter : public ACharacter
 public:
 	AhitTargetCharacter();
 
+
+
 protected:
 	virtual void BeginPlay();
-
+	void SpawnActors();
+	void DestroyActors();
 public:
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)

@@ -11,6 +11,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "MotionControllerComponent.h"
 #include "XRMotionControllerBase.h" // for FXRMotionControllerBase::RightHandSourceId
+#include "ActorSpawner.h"
+#include "ActorToSpawn.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 
@@ -136,6 +138,33 @@ void AhitTargetCharacter::SetupPlayerInputComponent(class UInputComponent* Playe
 	PlayerInputComponent->BindAxis("TurnRate", this, &AhitTargetCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("LookUpRate", this, &AhitTargetCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAction("SpawnActors", IE_Pressed, this, &AhitTargetCharacter::SpawnActors);
+	PlayerInputComponent->BindAction("DestroyActors", IE_Pressed, this, &AhitTargetCharacter::DestroyActors);
+}
+
+void AhitTargetCharacter::SpawnActors()
+{
+	UE_LOG(LogTemp, Warning, TEXT("output : %s"), L"SPawnActor");
+
+	//Find the Actor Spawner in the world, and invoke it's Spawn Actor function
+	AActor* ActorSpawnerTofind = UGameplayStatics::GetActorOfClass(GetWorld(), AActorSpawner::StaticClass());
+
+	AActorSpawner* ActorSpawnerReference = Cast<AActorSpawner>(ActorSpawnerTofind);
+	if (ActorSpawnerReference)
+	{
+		ActorSpawnerReference->SpawnActor();
+	}
+}
+
+void AhitTargetCharacter::DestroyActors()
+{
+	//Get every Actor to Spawn in the world and invoke Destroy Actor
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActorToSpawn::StaticClass(), FoundActors);
+	for (AActor* ActorFound : FoundActors)
+	{
+		ActorFound->Destroy();
+	}
 }
 
 void AhitTargetCharacter::OnFire()
